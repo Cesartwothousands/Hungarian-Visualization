@@ -3,34 +3,48 @@ import numpy as np
 class hungarian_graph:
     def __init__(self, costEdges):
         self.costEdges=costEdges
+        
         if costEdges.shape[0]!=costEdges.shape[1]:
             raise Exception("Cost Edges must be n X n")
+        
         self.n=costEdges.shape[0]
 
     def calculate(self):
         # init labels and matches
         self.labels_X=np.zeros((self.n,1))
         self.labels_Y=np.zeros((self.n,1))
+        
         for i in range(self.n):
             self.labels_Y[i]=(self.costEdges.min(0))[i]
+        
         equalityGraph=self.getEqualityGraph()
+        
         matches=[]
 
         iter=1
         while True:
-            print("################## "+str(iter)+" #################")
+            print("\n################## "+str(iter)+" #################")
             iter+=1
+            
             print("Searching augmenting path...")
             (existAugPath, path, S, T)=self.searchAugPath(matches,equalityGraph)
-            if existAugPath: #If there's augment path, we can extend the matches
+            
+            if existAugPath: 
+            #If there's augment path, we can extend the matches
                 print("Find augmenting path, extending matches")
+                
                 matches=self.invert(path,matches)
                 print("Current matches :")
                 print(matches)
+                
                 if len(matches)==self.n:
-                    break 
+                #Judge whether it's a perfect matching
+                    break
+                
             else:
                 print("Can't find augmenting path, updating labels")
+                print("\nCurrent matches :")
+                print(matches)
                 theta=self.getLabelTheta(S,T)
                 self.updateLabels(theta,S,T)
                 equalityGraph=self.getEqualityGraph()
@@ -49,8 +63,9 @@ class hungarian_graph:
         theta=float('inf')
         for i in range(self.n):
             for j in range(self.n):
-                if i in S and j not in T:
+                if (i in S) and (j not in T):
                     delta=self.costEdges[i,j]-self.labels_X[i]-self.labels_Y[j]
+                    
                     if theta>delta:
                         theta=delta
         return theta
@@ -71,31 +86,40 @@ class hungarian_graph:
         #directMatrix[i,j]=1 : x_i -> y_j
         totalVertexN=self.n+self.n+2 # node_0 is start node , node_totalVertexN-1 is end node
         directMatrix=np.zeros((totalVertexN,totalVertexN))
+        
         for i in range(0,totalVertexN-1):
             for j in range(0,totalVertexN):
                 if i==0 and j>=1 and j<=self.n:
                     directMatrix[i,j]=1
                     continue
+                
                 if j==totalVertexN-1 and i>self.n:
                     directMatrix[i,j]=1
                     continue
+                
                 if i==j or i==0 or j==0 or j==totalVertexN-1:
                     continue
+                
                 iIsX=False
                 jIsX=False
+                
                 if i>0 and i<=self.n:
                     iIsX=True
                 elif i>self.n and i<=totalVertexN-2:
                     iIsX=False
+                    
                 if j>0 and j<=self.n:
-                    jIsX=True
+                    jIsX=True    
                 elif j>self.n and j<=totalVertexN-2:
                     jIsX=False
+                    
                 if iIsX and jIsX==False:
                     directMatrix[i,j]=equalityGraph[i-1,j-1-self.n]
+                    
         for (x,y) in matches:
             directMatrix[x+1,y+1+self.n]=0
             directMatrix[y+1+self.n,x+1]=1
+            
         for j in range(1, self.n+1):
             isMatched=False
             for k in range(self.n, totalVertexN-1):
@@ -104,6 +128,7 @@ class hungarian_graph:
                     break
             if isMatched:
                 directMatrix[0][j]=0
+                
         for i in range(self.n, totalVertexN-1):
             isMatched=False
             for k in range(1, self.n+1):
@@ -131,6 +156,7 @@ class hungarian_graph:
                 vertexIndex_B=shortestRoute[i+1]
                 actualIndex_B=0
                 vertexIsX_B=False
+                
                 if vertexIndex_B>=1 and vertexIndex_B<=self.n:
                     actualIndex_B=vertexIndex_B-1
                     vertexIsX_B=True
@@ -139,6 +165,7 @@ class hungarian_graph:
                 
                 augmentPath.append((actualIndex_A,actualIndex_B,vertexIsX_A))
             return (True, augmentPath, None, None)
+        
         else: 
             S=[]
             T=[]

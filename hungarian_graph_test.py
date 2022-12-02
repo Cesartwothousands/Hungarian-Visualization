@@ -8,4 +8,4 @@ costEdges=np.array([
     [5,6,7,8]
 ])
 algorithm=hungarian_graph(costEdges)
-print(algorithm.calculate())
+print("\n", algorithm.calculate())
