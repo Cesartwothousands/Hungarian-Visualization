@@ -1,3 +1,4 @@
+# inhenced set to help get points by their x or y index easier
 class PointSet:
     def __init__(self):
         self.x2y={}
@@ -16,7 +17,7 @@ class PointSet:
         return (x,self.x2y[x])
 
     def get_by_y(self,y):
-        return (y,self.y2x[y])
+        return (self.y2x[y],y)
 
     def contains_x(self,x):
         return x in self.x2y

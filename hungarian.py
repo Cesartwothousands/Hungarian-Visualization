@@ -8,7 +8,7 @@ class Hungarian:
         self.covered_colums=set()
         self.covered_row=set()
         self.starred_point=PointSet()    
-        self.primed_point=PointSet()
+        self.primed_point_x2y={}
 
     def full_covered(self):
         matrix=self.matrix
@@ -24,8 +24,8 @@ class Hungarian:
         for tuple in self.starred_point:
             starred.append(tuple)
         primed=[]
-        for tuple in self.primed_point:
-            primed.append(tuple)
+        for key in self.primed_point_x2y:
+            primed.append((key,self.primed_point_x2y[key]))
         self.sequence.append({
             "matrix":self.matrix.copy(),
             "covered rows":self.covered_row.copy(),
@@ -47,14 +47,17 @@ class Hungarian:
         matrix-=min_rows
         min_cols = np.amin(matrix, axis=0,keepdims=True)
         matrix-=min_cols
+        cost+=np.sum(min_cols)
+        cost+=np.sum(min_rows)
         self.snapshot()
-
-        while len(self.covered_row)+len(self.covered_colums)!=n:
+        while len(self.covered_row)+len(self.covered_colums)<n:
             #Step 3
             #All zeros in the matrix must be covered by marking as few rows and/or columns as possible
             #assign as many as possible
-            self.starred_point=PointSet()    
-            self.primed_point=PointSet()
+            self.starred_point=PointSet() 
+            #primed point can be on the same column cannot use pointset   
+            #but primed point only has a x->y mapping, so can use a dict to replace
+            self.primed_point_x2y={}
             self.covered_colums=set()
             self.covered_row=set()
             find=False
@@ -76,7 +79,7 @@ class Hungarian:
                     for y in range(n):
                         if matrix[x][y]==0 and x not in self.covered_row and y not in self.covered_colums:
                             #prime it
-                            self.primed_point.add_point((x,y))
+                            self.primed_point_x2y[x]=y
                             self.snapshot()
                             #if a non covered zero is on the same row as a starred zero
                             if self.starred_point.contains_x(x):
@@ -95,21 +98,23 @@ class Hungarian:
                                 #has no assignment on its row
                                 px=x
                                 py=y
-                                primed_on_path=PointSet()
-                                starred_on_path=PointSet()
-                                primed_on_path.add_point((px,py))
+                                primed_on_path=[]
+                                starred_on_path=[]
+                                primed_on_path.append((px,py))
                                 while True:
                                     #step1
                                     #find a starred zero on column
                                     if self.starred_point.contains_y(py):
                                         px,_=self.starred_point.get_by_y(py)
-                                        starred_on_path.add_point((px,py))
+                                        starred_on_path.append((px,py))
                                     else:        
                                         break
                                     #step2
-                                    #find a primed zero on row
-                                    _,py=self.primed_point.get_by_x(px)
-                                    primed_on_path.add_point((px,py))
+                                    #find a primed zero on row, there will always be one on row
+                                    #if not px in self.primed_point_x2y:
+                                    #    print(self.sequence)
+                                    py=self.primed_point_x2y[px]
+                                    primed_on_path.append((px,py))
                                 #star all prime zero and remove all covered lines and prime zeros
                                 self.covered_row=set()
                                 self.covered_colums=set()
@@ -117,23 +122,26 @@ class Hungarian:
                                     self.starred_point.remove_point((px,py))
                                 for px,py in primed_on_path:
                                     self.starred_point.add_point((px,py))
-                                self.primed_point=PointSet()
+                                self.primed_point_x2y={}
                                 #cover the columns of all prime zero
                                 for px,py in self.starred_point:
                                     self.covered_colums.add(py)
+                            if len(self.covered_row)+len(self.covered_colums)>=n:
+                                #find the result
+                                return self.starred_point
 
             #Step 4
             # for the left values, find the lowest , subtract from every unmarked element and add to every 
             # element covered by two lines
-            if len(self.covered_row)+len(self.covered_colums)==n:
+            if len(self.covered_row)+len(self.covered_colums)>=n:
                 #find the result
-                return
+                return self.starred_point
             min_val=matrix.max()
             for x in range(n):
                 for y in range(n):
                     if x not in self.covered_row and y not in self.covered_colums:
                         min_val=min(min_val,matrix[x][y])
-
+            cost+=min_val
             for x in range(n):
                 for y in range(n):
                     if x not in self.covered_row and y not in self.covered_colums:
@@ -141,6 +149,6 @@ class Hungarian:
                     if x in self.covered_row and y in self.covered_colums:
                         matrix[x][y]+=min_val
             self.snapshot()
-
+        return self.starred_point
 
 

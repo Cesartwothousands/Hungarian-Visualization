@@ -1,5 +1,7 @@
 import numpy as np
 
+# n^4 Graph implemenation of Hungarian algorithm
+
 class min_bipartite_graph_match(object):
  
     def __init__(self,graph):

@@ -2,6 +2,9 @@ from hungarian import Hungarian
 import numpy as np
 from app import paint_clip
 import streamlit as st
+
+# sample visualization of Munkres
+
 matrix=np.array([
         [2,3,2,4],
         [4,1,5,1],

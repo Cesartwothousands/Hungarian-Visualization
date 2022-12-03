@@ -1,5 +1,5 @@
 import numpy as np
-
+# Others implementation used for evaluate our implementation
 class AdjacencyMatrixHungarian:
     def __init__(self, costEdges):
         self.costEdges=costEdges
@@ -20,15 +20,15 @@ class AdjacencyMatrixHungarian:
     def calculate(self):
         self.rowReduction()
         self.columnReduction()
-        print("Cost matrix after row and column reduction")
-        print(self.costEdges)
+        #print("Cost matrix after row and column reduction")
+        #print(self.costEdges)
         (coverRows,coverColumns,independentZeros)=self.findMinCoverLines()
         n1=len(coverRows)+len(coverColumns)
         while n1!=self.n:
-            print("Haven't reach optimal, start iterate reduction")
+            #print("Haven't reach optimal, start iterate reduction")
             self.costEdges=self.iterateReduction(coverRows,coverColumns)
-            print("Cost matrix after iterate reduction")
-            print(self.costEdges)
+            #print("Cost matrix after iterate reduction")
+            #print(self.costEdges)
             (coverRows,coverColumns,independentZeros)=self.findMinCoverLines()
             n1=len(coverRows)+len(coverColumns)
         return independentZeros

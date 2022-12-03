@@ -18,9 +18,11 @@ open this project directory in command line
 ```
 streamlit run .\hungarian_test.py
 ```
-
+## How to test
+run `randomtest.py`
 ## To Do
-- compare performance with $n^3$ implementation and $n^4$ implementation
-- implement the $n^3$ implementation
-- compare the result with scipy's implementation, ensure that the code is bug-free
-- add more complex visualization support
+- [ ] compare performance with $n^3$ implementation and $n^4$ implementation
+- [x] implement the $n^3$ implementation
+- [x] compare the result with scipy's implementation, ensure that the code is bug-free
+- [ ] add more complex visualization support
+- [ ] add n3Graph implementation random test
