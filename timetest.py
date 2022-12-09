@@ -1,29 +1,30 @@
 import numpy as np
 import time
 from AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
-#from n4GraphSolution import min_bipartite_graph_match
+from n4GraphSolution import min_bipartite_graph_match
 #from n3GraphSolution import min_bipartite_graph_match
 from hungarian import Hungarian
 
 #time test on different implementations
+'''RESULT:
+1  is:  63.371477365493774
+2  is:  247.23789238929749
+'''
 
 N3=0
 N4=1
 HUN=2
 
-flags=[N3, N4, HUN]
+flags=[N4, HUN]
 
 for flag in flags:
-    if flag == N3:
-        from n3GraphSolution import min_bipartite_graph_match
-    elif flag == N4:
-        from n4GraphSolution import min_bipartite_graph_match
+    
         
-    n = 10
+    n = 100000
     time_start = time.time()
     for i in range(n):
-        print(flag, i)
-        costEdges=np.random.randint(5,15,(6,6))
+        
+        costEdges=np.random.randint(5,15,(16,16))
         matrix=costEdges.copy()
         #print("\n", costEdges)
         #print(matrix)
@@ -40,7 +41,7 @@ for flag in flags:
             for x,y in result:
                 val+=int(matrix[x][y])
         #print("\nAnswer:", val)
-        
+        '''
         algorithm=AdjacencyMatrixHungarian(costEdges)
         result=algorithm.calculate()
         #print("\nOptimal result")
@@ -53,7 +54,7 @@ for flag in flags:
             print("neq")
             print(sum)
             print(val)
-            print(matrix)
+            print(matrix)'''
         
         if i == n-1:
             time_end = time.time()
