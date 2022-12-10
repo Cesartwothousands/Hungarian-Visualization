@@ -1,15 +1,16 @@
 import numpy as np
 import time
 from AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
-from n4GraphSolution import min_bipartite_graph_match
+from n3GraphSolution import min_bipartite_graph_match
 #from n3GraphSolution import min_bipartite_graph_match
 from N4Review import min
 from hungarian import Hungarian
 
 #time test on different implementations
 '''RESULT:
-1  is:  63.371477365493774
-2  is:  247.23789238929749
+0  is:  55.48445653915405
+1  is:  96.870934009552
+2  is:  215.36391878128052
 '''
 
 N3=0
@@ -21,7 +22,7 @@ flags=[N3, N4, HUN]
 for flag in flags:
     
         
-    n = 1000
+    n = 100000
     time_start = time.time()
     for i in range(n):
         

@@ -33,6 +33,7 @@ class min_bipartite_graph_match(object):
                 continue
             
             tmp_delta = self.lx[x] + self.ly[y] - self.graph[x][y]
+            tmp_delta = tmp_delta 
             
             if  tmp_delta == 0:
                 self.visy[y] = True
@@ -54,22 +55,37 @@ class min_bipartite_graph_match(object):
                     break
                 
                 else: 
+                    delta = -1
                 # update slack
-                    delta = self.slack[~self.visy].min()
+                    for i in range(self.n):
+                        if not self.visy[i] and delta < self.slack[i]:
+                            delta = self.slack[i]
+                    #delta = self.slack[~self.visy].max()
                     self.lx[self.visx] -= delta
                     self.ly[self.visy] += delta
-                    self.slack[~self.visy] -= delta
+                    #self.slack[~self.visy] += delta
  
         return np.sum(self.lx) + np.sum(self.ly)
  
     def __call__(self):
         return self.KM()
-    
-costEdges=np.array([
-        [2,3,2,4],
-        [4,1,5,1],
-        [1,3,6,2],
-        [5,6,7,8]    
-])
-algorithm=min_bipartite_graph_match(costEdges)
-print("\n", algorithm.__call__())
+
+if __name__ == '__main__':
+
+    costEdges=np.array([
+            [5,11],
+            [10,12]    
+    ])
+
+    algorithm=min_bipartite_graph_match(costEdges)
+    print("\n", algorithm.__call__())
+
+        
+    costEdges=np.array([
+            [2,3,2,4],
+            [4,1,5,1],
+            [1,3,6,2],
+            [5,6,7,8]    
+    ])
+    algorithm=min_bipartite_graph_match(costEdges)
+    print("\n", algorithm.__call__())
