@@ -41,3 +41,4 @@ for flag in flags:
             print(sum)
             print(val)
             print(matrix)
+        else: print("Right!")

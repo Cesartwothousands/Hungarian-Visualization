@@ -3,6 +3,7 @@ import time
 from AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
 from n4GraphSolution import min_bipartite_graph_match
 #from n3GraphSolution import min_bipartite_graph_match
+from N4Review import min
 from hungarian import Hungarian
 
 #time test on different implementations
@@ -15,12 +16,12 @@ N3=0
 N4=1
 HUN=2
 
-flags=[N4, HUN]
+flags=[N3, N4, HUN]
 
 for flag in flags:
     
         
-    n = 100000
+    n = 1000
     time_start = time.time()
     for i in range(n):
         
@@ -29,17 +30,14 @@ for flag in flags:
         #print("\n", costEdges)
         #print(matrix)
         if flag==N4:
-            algorithm=min_bipartite_graph_match(costEdges)
+            algorithm=min(costEdges)
             val=algorithm.__call__()
         elif flag==N3:
             algorithm=min_bipartite_graph_match(costEdges)
             val=algorithm.__call__()
         elif flag==HUN:
-            algorithm=Hungarian(costEdges)
+            algorithm=AdjacencyMatrixHungarian(costEdges)
             result=algorithm.calculate()
-            val=0
-            for x,y in result:
-                val+=int(matrix[x][y])
         #print("\nAnswer:", val)
         '''
         algorithm=AdjacencyMatrixHungarian(costEdges)
