@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 
-
 # Some helper function to visualize Munkres algorithm
 
 def highlight_row(data, list_covered_row):

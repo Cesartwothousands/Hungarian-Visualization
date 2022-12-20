@@ -1,6 +1,7 @@
 import numpy as np
 from algorithm.pointset import PointSet
 
+# Implemenation of Jonker-Volgenant algorithm
 
 class Hungarian:
     def __init__(self, matrix) -> None:

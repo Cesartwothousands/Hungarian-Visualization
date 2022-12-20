@@ -1,7 +1,7 @@
 import numpy as np
 
-
 # Others implementation used for evaluate our implementation
+
 class AdjacencyMatrixHungarian:
     def __init__(self, costEdges):
         self.costEdges = costEdges

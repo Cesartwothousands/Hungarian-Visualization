@@ -1,4 +1,6 @@
+
 # inhenced set to help get points by their x or y index easier
+
 class PointSet:
     def __init__(self):
         self.x2y = {}

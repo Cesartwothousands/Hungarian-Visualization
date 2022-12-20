@@ -4,10 +4,10 @@ sys.path.insert(0, os.getcwd())
 import numpy as np
 from algorithm import AdjacencyMatrixHungarian
 from algorithm.AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
-from algorithm.N4Review import min
+from algorithm.n4 import min
 from algorithm.hungarian import Hungarian
 
-# random test on different implementations
+# Random test on different implementations
 
 N3 = 0
 N4 = 1

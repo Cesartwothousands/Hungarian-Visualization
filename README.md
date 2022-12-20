@@ -31,7 +31,7 @@ core algorithm at `algorithm\n3.py`, using `matplotlib` and `networkx` for visua
 
 run `visualization\n3vis.py`
 ### N4 Graph Solution
-core algorithm at `algorithm\N4Review.py`, using `matplotlib` and `networkx` for visualization.
+core algorithm at `algorithm\n4.py`, using `matplotlib` and `networkx` for visualization.
 
 run `visualization\n4vis.py`
 ## Test Algorithm

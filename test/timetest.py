@@ -3,10 +3,10 @@ import os
 sys.path.insert(0, os.getcwd())
 import numpy as np
 import time
-from algorithm.N4Review import min as n4min
+from algorithm.n4 import min as n4min
 from algorithm.n3 import min as n3min
 
-#time test on different implementations
+# Time test on different implementations
 
 N3=0
 N4=1
@@ -15,7 +15,6 @@ flags=[N4, N3]
 
 for flag in flags:
     
-        
     n = 100000
     time_start = time.time()
     for i in range(n):

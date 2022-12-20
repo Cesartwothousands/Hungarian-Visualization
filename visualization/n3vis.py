@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+
 # n^3 Graph implemenation of Hungarian algorithm
 
 class min_bipartite_graph_match(object):
