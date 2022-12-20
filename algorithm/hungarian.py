@@ -1,5 +1,5 @@
 import numpy as np
-from pointset import PointSet
+from algorithm.pointset import PointSet
 
 
 class Hungarian:

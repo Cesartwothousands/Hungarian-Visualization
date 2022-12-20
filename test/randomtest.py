@@ -1,7 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.getcwd())
 import numpy as np
-from AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
-from n4GraphSolution import min_bipartite_graph_match
-from hungarian import Hungarian
+from algorithm import AdjacencyMatrixHungarian
+from algorithm.AdjacencyMatrixHungarian import AdjacencyMatrixHungarian
+from algorithm.N4Review import min
+from algorithm.hungarian import Hungarian
 
 # random test on different implementations
 
@@ -10,6 +14,7 @@ N4 = 1
 HUN = 2
 
 flags = [N4, HUN]
+erro_count=0
 for flag in flags:
     for i in range(1000):
 
@@ -18,7 +23,7 @@ for flag in flags:
         # print("\n", costEdges)
         # print(matrix)
         if flag == N4:
-            algorithm = min_bipartite_graph_match(costEdges)
+            algorithm = min(costEdges)
             val = algorithm.__call__()
         elif flag == HUN:
             algorithm = Hungarian(costEdges)
@@ -37,8 +42,9 @@ for flag in flags:
             sum += int(matrix[x][y])
         # print(sum)
         if sum != val:
+            erro_count+=1
             print("neq")
             print(sum)
             print(val)
             print(matrix)
-        else: print("Right!")
+print(f"finish with {erro_count} errors.")

@@ -1,6 +1,9 @@
-from hungarian import Hungarian
+import sys
+import os
+sys.path.insert(0, os.getcwd())
+from algorithm.hungarian import Hungarian
 import numpy as np
-from app import paint_clip
+from visualization.app import paint_clip
 import streamlit as st
 
 # sample visualization of Munkres

@@ -1,9 +1,9 @@
 import numpy as np
 
 
-# n^3 Graph implemenation of Hungarian algorithm
+# n^4 Graph implemenation of Hungarian algorithm
 
-class min_bipartite_graph_match(object):
+class min(object):
 
     def __init__(self, graph):
         self.graph = graph
@@ -15,12 +15,9 @@ class min_bipartite_graph_match(object):
         self.ly = np.array([0] * self.m, dtype=int)
         # if weight of edges is float, change dtype to float
         self.match = np.array([-1] * self.n, dtype=int)
-        self.slack = np.array([0] * self.m, dtype=int)
+
         self.visx = np.array([False] * self.n, dtype=bool)
         self.visy = np.array([False] * self.m, dtype=bool)
-
-    def reset_slack(self):
-        self.slack.fill(-1)
 
     def reset_vis(self):
         self.visx.fill(False)
@@ -41,37 +38,29 @@ class min_bipartite_graph_match(object):
                     self.match[y] = x
                     return True
 
-            elif self.slack[y] < tmp_delta:
-                self.slack[y] = tmp_delta
-
         return False
 
     def KM(self):
+        delta = -1
         for x in range(self.n):
-            self.reset_slack()
+
             while True:
                 self.reset_vis()
+
                 if self.find_path(x):
                     break
-
                 else:
-                    # update slack
-                    delta = self.slack[~self.visy].min()
+
+                    for i in range(self.n):
+                        for j in range(self.n):
+                            if not self.visy[i] and delta > self.graph[i][j] - self.lx[i] - self.ly[j]:
+                                delta = self.graph[i][j] - self.lx[i] - self.ly[j]
+
                     self.lx[self.visx] -= delta
                     self.ly[self.visy] += delta
-                    self.slack[~self.visy] -= delta
 
         return np.sum(self.lx) + np.sum(self.ly)
 
     def __call__(self):
         return self.KM()
 
-
-costEdges = np.array([
-    [2, 3, 2, 4],
-    [4, 1, 5, 1],
-    [1, 3, 6, 2],
-    [5, 6, 7, 8]
-])
-algorithm = min_bipartite_graph_match(costEdges)
-print("\n", algorithm.__call__())
